@@ -37,6 +37,7 @@
 #  
 #  Related Topics Two Pointers
 from typing import List
+import decorator_time
 # leetcode submit region begin(Prohibit modification and deletion)
 class Solution:
     def intervalIntersection(self, A: List[List[int]], B: List[List[int]]) -> List[List[int]]:
@@ -60,6 +61,7 @@ class Solution:
 # leetcode submit region end(Prohibit modification and deletion)
 
 
+@decorator_time.count_time
 def main():
     sopj = Solution()
     print(sopj.intervalIntersection(A = [[0,2],[5,10],[13,23],[24,25]], B = [[1,5],[8,12],[15,24],[25,26]]))
