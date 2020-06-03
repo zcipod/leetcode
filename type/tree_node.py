@@ -30,50 +30,50 @@ class TreeNode:
         self.right = right
         self.parent = parent
 
-    def createTree(nums):
+    def create_tree(nums):
         """
         This function is to create a Tree from an array
         Note: every non None element must have two children nodes;
                 every None element must not have any children nodes
         :return:
         """
-        def buildTree(treeList, nums):
+        def build_tree(tree_list, nums):
             """
             This fuction is to build the next level nodes
             and link them to the previous level nodes
             """
 
             if len(nums) == 0:
-                return treeList
-            nextList = []
+                return tree_list
+            next_list = []
             j = 0
-            for i in treeList:
+            for i in tree_list:
                 for _ in range(2):
                     if i is not None and j < len(nums):
                         if nums[j] is None:
-                            nextList.append(None)
+                            next_list.append(None)
                         else:
-                            nextList.append(TreeNode(nums[j]))
+                            next_list.append(TreeNode(nums[j]))
                         j += 1
-            resList = buildTree(nextList, nums[j:])
+            res_list = build_tree(next_list, nums[j:])
             j = 0
-            for i in treeList:
+            for i in tree_list:
                 if i is None:
                     continue
-                if j < len(resList):
-                    if nextList[j] is not None:
-                        nextList[j].parent = i
-                    i.left = nextList[j]
+                if j < len(res_list):
+                    if next_list[j] is not None:
+                        next_list[j].parent = i
+                    i.left = next_list[j]
                     j += 1
-                if j < len(resList):
-                    if nextList[j] is not None:
-                        nextList[j].parent = i
-                    i.right = nextList[j]
+                if j < len(res_list):
+                    if next_list[j] is not None:
+                        next_list[j].parent = i
+                    i.right = next_list[j]
                     j += 1
-            return treeList
+            return tree_list
 
         root = TreeNode(nums[0])
-        return buildTree([root], nums[1:])[0]
+        return build_tree([root], nums[1:])[0]
 
     def draw_tree(self) -> None:
         """
@@ -111,7 +111,7 @@ class TreeNode:
 def main():
     null = None
     nums = [6, 7, 8, 2, 7, null, 3, 9, null, 1, 4, null, null, null, 5]
-    root = TreeNode.createTree(nums)
+    root = TreeNode.create_tree(nums)
     root.draw_tree()
 
 if __name__ == "__main__":

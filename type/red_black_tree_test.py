@@ -1,5 +1,5 @@
 import unittest
-from RedBlackTree import RedBlackTree
+from red_black_tree import RedBlackTree
 
 
 class MyTestCase(unittest.TestCase):
@@ -68,6 +68,22 @@ class MyTestCase(unittest.TestCase):
         self.assertEqual(parent.parent.val, n.val)
         self.assertEqual(child.parent.val, n.val)
 
+    def test_find(self, num:int):
+        root = RedBlackTree()
 
+    def test_insert(self,num:int):
+        pass
+
+    def test_delete_left(self):
+        pass
+
+    def test_delete_right(self):
+        pass
+
+    def test_add_left(self):
+        pass
+
+    def test_add_right(self):
+        pass
 if __name__ == '__main__':
     unittest.main()
