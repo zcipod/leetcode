@@ -43,6 +43,12 @@ class RedBlackTree:
         if right is not None:
             self.size += right.size
 
+    def __str__(self):
+        return "".join([self.color, "_Node: ", str(self.val), "; Size: ", str(self.size)])
+
+    def __repr__(self):
+        return self.__str__()
+
     def is_black(self):
         """check if the node is black node or not"""
         return self.color == "Black"
@@ -108,12 +114,80 @@ class RedBlackTree:
         par.color = 'Red'
         self.color = 'Black'
 
+    def add_left(self, node):
+        """add or update the left node of the current node"""
+        if self.left is not None:
+            self.size -= self.left.size
+        self.left = node
+        self.size += node.size
+        return self
 
-c = RedBlackTree(8, 'Red')
-n = RedBlackTree(4, 'Red', right=c)
-a = RedBlackTree(2, 'Black',right=n)
-c.parent = n
-n.parent = a
-n.left_rotate()
+    def add_right(self, node):
+        """add or update the right node of the current node"""
+        if self.right is not None:
+            self.size -= self.right.size
+        self.right = node
+        self.size += node.size
+        return self
 
-print(n.print_out())
+    def find(self, num):
+        """find a specific num in the time of O(logn)
+        if the num is not exist in the tree, return None
+        or return the tree node whose val equals the num"""
+        if self.val == num:
+            return self
+        if num < self.val:
+            return self.left.find(num) if self.left is not None else None
+        if num > self.val:
+            return self.right.find(num) if self.right is not None else None
+
+    def insert(self, num):
+        """insert a num(node) to a tree"""
+        if self.val == num:
+            raise ValueError('the num is already EXIST!')
+        if num < self.val:
+            if self.left is not None:
+                res = self.left.insert(num)
+                self.size = self.size + 1 if res is not None else self.size
+                return res
+            else:
+                res = RedBlackTree(num, parent=self)
+                self.left = res
+                self.size += 1
+                if self.color == "Red":
+                    if self.val == self.parent.left.val:
+                        self.right_rotate()
+                    else:
+                        parent = self.parent
+                        self.size = 1
+                        self.left = None
+                        self.parent = res
+                        res.right = self
+                        res.size = 2
+                        res.parent = parent
+                        parent.right = res
+                        res.left_rotate()
+                return res
+        elif num > self.val:
+            if self.right is not None:
+                res = self.right.insert(num)
+                self.size = self.size + 1 if res is not None else self.size
+                return res
+            else:
+                res = RedBlackTree(num, parent=self)
+                self.right = res
+                self.size += 1
+                if self.color == "Red":
+                    if self.val == self.parent.right.val:
+                        self.left_rotate()
+                    else:
+                        parent = self.parent
+                        self.size = 1
+                        self.right = None
+                        self.parent = res
+                        res.left = self
+                        res.size = 2
+                        res.parent = parent
+                        parent.left = res
+                        res.right_rotate()
+                return res

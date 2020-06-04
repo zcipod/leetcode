@@ -3,6 +3,46 @@ from red_black_tree import RedBlackTree
 
 
 class MyTestCase(unittest.TestCase):
+    @staticmethod
+    def init_tree() -> RedBlackTree:
+        """before the testing, init a whole red-black tree:
+                               50
+                          /        \
+                         40          60
+                       /   \      /    \
+                     20R   45    55R   70R
+                    /  \       /   \   /  \
+                   10  30     51  56  65  75
+                             """
+        left = RedBlackTree(10, 'Black')
+        right = RedBlackTree(30, 'Black')
+        root = RedBlackTree(20, left=left, right=right)
+        left.parent = root
+        right.parent = root
+        left = root
+        right = RedBlackTree(45, 'Black')
+        root = RedBlackTree(40, 'Black', left=left, right=right)
+        left.parent = root
+        right.parent = root
+        left_reserve = root
+        left = RedBlackTree(51, "Black")
+        right = RedBlackTree(56, "Black")
+        root1 = RedBlackTree(55, left=left, right=right)
+        left.parent = root1
+        right.parent = root1
+        left = RedBlackTree(65, "Black")
+        right = RedBlackTree(75, 'Black')
+        root2 = RedBlackTree(70, left=left, right= right)
+        left.parent = root2
+        right.parent = root2
+        root3 = RedBlackTree(60, "Black", left=root1, right=root2)
+        root1.parent = root3
+        root2.parent = root3
+        root = RedBlackTree(50, "Black", left=left_reserve, right=root3)
+        left_reserve.parent = root
+        root3.parent = root
+        return root
+
     def test_init(self):
         left = RedBlackTree(5, 'Black')
         right = RedBlackTree(9, 'Black')
@@ -68,11 +108,30 @@ class MyTestCase(unittest.TestCase):
         self.assertEqual(parent.parent.val, n.val)
         self.assertEqual(child.parent.val, n.val)
 
-    def test_find(self, num:int):
-        root = RedBlackTree()
+    def test_find(self):
+        root = self.init_tree()
+        self.assertEqual(root.find(10).val, 10)
+        self.assertEqual(root.find(20).color, "Red")
+        self.assertEqual(root.find(55).left.val, 51)
+        self.assertEqual(root.find(65).parent.val, 70)
+        self.assertEqual(root.find(9), None)
 
-    def test_insert(self,num:int):
-        pass
+    def test_insert(self):
+        root = self.init_tree()
+        self.assertEqual(root.insert(9).val, 9)
+        self.assertEqual(root.left.left.left.left.val, 9)
+        self.assertEqual(root.left.left.left.left.color, "Red")
+        self.assertEqual(root.left.left.left.size, 2)
+        self.assertEqual(root.left.left.left.left.parent.val, 10)
+        root.insert(8)
+        self.assertEqual(root.left.left.left.val, 9)
+        self.assertEqual(root.left.left.left.color, "Black")
+        self.assertEqual(root.left.left.left.left.val, 8)
+        self.assertEqual(root.left.left.left.right.color, "Red")
+        self.assertEqual(root.left.left.left.left.color, "Red")
+        with self.assertRaises(ValueError):
+            root.insert(10)
+
 
     def test_delete_left(self):
         pass
@@ -85,5 +144,7 @@ class MyTestCase(unittest.TestCase):
 
     def test_add_right(self):
         pass
+
+
 if __name__ == '__main__':
     unittest.main()
