@@ -58,7 +58,6 @@ class MyTestCase(unittest.TestCase):
         left = RedBlackTree(5, parent=root)
         right = RedBlackTree(9, 'Black', parent=root)
         self.assertEqual([left.parent.val, right.parent.val, left.color], [8, 8, 'Red'])
-        self.assertEqual([left.size, right.size, root.size], [1, 1, 3])
 
     def test_isblack(self):
         node = RedBlackTree(5)
@@ -121,7 +120,6 @@ class MyTestCase(unittest.TestCase):
         self.assertEqual(root.insert(9).val, 9)
         self.assertEqual(root.left.left.left.left.val, 9)
         self.assertEqual(root.left.left.left.left.color, "Red")
-        self.assertEqual(root.left.left.left.size, 2)
         self.assertEqual(root.left.left.left.left.parent.val, 10)
         root.insert(8)
         self.assertEqual(root.left.left.left.val, 9)
@@ -132,17 +130,7 @@ class MyTestCase(unittest.TestCase):
         with self.assertRaises(ValueError):
             root.insert(10)
 
-
-    def test_delete_left(self):
-        pass
-
-    def test_delete_right(self):
-        pass
-
-    def test_add_left(self):
-        pass
-
-    def test_add_right(self):
+    def test_delete(self):
         pass
 
 

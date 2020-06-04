@@ -20,16 +20,12 @@ from typing import List
 
 class RedBlackTree:
     """Red Black Tree type, includes attributes:
-    value, color, left node, right node, parent node and the size of the tree
-    the attribute of size is not good right now,
-    it can only calculate while defining, it is the sum of node numbers of its
-    children, including itself"""
+    value, color, left node, right node, parent node"""
     val = None
     color = ""
     left = None
     right = None
     parent = None
-    size = 1
 
     def __init__(self, val, color="Red", left=None, right=None, parent=None):
         self.val = val
@@ -37,14 +33,9 @@ class RedBlackTree:
         self.left = left
         self.right = right
         self.parent = parent
-        self.size = 1
-        if left is not None:
-            self.size += left.size
-        if right is not None:
-            self.size += right.size
 
     def __str__(self):
-        return "".join([self.color, "_Node: ", str(self.val), "; Size: ", str(self.size)])
+        return "".join([self.color, "_Node: ", str(self.val)])
 
     def __repr__(self):
         return self.__str__()
@@ -86,10 +77,8 @@ class RedBlackTree:
             gra_par.left = self
             self.parent = gra_par
         par.parent = self
-        par.size -= par.right.size
         par.right = None
         self.left = par
-        self.size += par.size
         par.color = 'Red'
         self.color = 'Black'
 
@@ -107,28 +96,10 @@ class RedBlackTree:
             gra_par.left = self
             self.parent = gra_par
         par.parent = self
-        par.size -= par.left.size
         par.left = None
         self.right = par
-        self.size += par.size
         par.color = 'Red'
         self.color = 'Black'
-
-    def add_left(self, node):
-        """add or update the left node of the current node"""
-        if self.left is not None:
-            self.size -= self.left.size
-        self.left = node
-        self.size += node.size
-        return self
-
-    def add_right(self, node):
-        """add or update the right node of the current node"""
-        if self.right is not None:
-            self.size -= self.right.size
-        self.right = node
-        self.size += node.size
-        return self
 
     def find(self, num):
         """find a specific num in the time of O(logn)
@@ -148,22 +119,18 @@ class RedBlackTree:
         if num < self.val:
             if self.left is not None:
                 res = self.left.insert(num)
-                self.size = self.size + 1 if res is not None else self.size
                 return res
             else:
                 res = RedBlackTree(num, parent=self)
                 self.left = res
-                self.size += 1
                 if self.color == "Red":
                     if self.val == self.parent.left.val:
                         self.right_rotate()
                     else:
                         parent = self.parent
-                        self.size = 1
                         self.left = None
                         self.parent = res
                         res.right = self
-                        res.size = 2
                         res.parent = parent
                         parent.right = res
                         res.left_rotate()
@@ -171,22 +138,18 @@ class RedBlackTree:
         elif num > self.val:
             if self.right is not None:
                 res = self.right.insert(num)
-                self.size = self.size + 1 if res is not None else self.size
                 return res
             else:
                 res = RedBlackTree(num, parent=self)
                 self.right = res
-                self.size += 1
                 if self.color == "Red":
                     if self.val == self.parent.right.val:
                         self.left_rotate()
                     else:
                         parent = self.parent
-                        self.size = 1
                         self.right = None
                         self.parent = res
                         res.left = self
-                        res.size = 2
                         res.parent = parent
                         parent.left = res
                         res.right_rotate()
