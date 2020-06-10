@@ -53,23 +53,15 @@ import decorator_time
 # leetcode submit region begin(Prohibit modification and deletion)
 class Solution:
     def numTeams(self, rating: List[int]) -> int:
-        startset = set()
-        middle = {}
-        for i in rating:
-            lower = [x for x in startset if x < i]
-            higher = [x for x in startset if x > i]
-            if len(lower) or len(higher):
-                middle[i] = [len(lower), len(higher), 0, 0]
-            startset.add(i)
-            for j in middle:
-                if i > j:
-                    middle[j][2] += 1
-                elif i < j:
-                    middle[j][3] += 1
-        res = 0
-        for j in middle:
-            res = res + middle[j][0] * middle[j][2] + middle[j][1] * middle[j][3]
-        return res
+        res = [[0] * 4 for _ in range(len(rating))]
+        for i in range(len(rating)):
+            res[i][0] = len([x for x in rating[:i] if x < rating[i]])
+            res[i][1] = len([x for x in rating[:i] if x > rating[i]])
+            if res[i][0]:
+                res[i][2] = len([x for x in rating[i:] if x > rating[i]])
+            if res[i][1]:
+                res[i][3] = len([x for x in rating[i:] if x < rating[i]])
+        return sum([x[0] * x[2] + x[1] * x[3] for x in res])
 
 # leetcode submit region end(Prohibit modification and deletion)
 
