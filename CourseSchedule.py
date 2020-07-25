@@ -49,6 +49,7 @@ import decorator_time
 class Solution:
     def __init__(self):
         self.record = []
+        self.num = 0
 
     def canFinish(self, numCourses: int, prerequisites: List[List[int]]) -> bool:
         self.record = [[set(), set(), False] for _ in range(numCourses)]
@@ -56,21 +57,21 @@ class Solution:
             self.record[i[0]][0].add(i[1])
             self.record[i[1]][1].add(i[0])
         for i in range(numCourses):
+            if self.record[i][2]:
+                continue
             if len(self.record[i][0]) == 0:
                 self.record[i][2] = True
+                self.num += 1
                 for target in self.record[i][1]:
                     self.check(target, i)
-        for i in range(numCourses):
-            if not self.record[i][2]:
-                return False
-        else:
-            return True
+        return True if self.num == numCourses else False
 
 
     def check(self, target, finish):
         self.record[target][0].discard(finish)
         if len(self.record[target][0]) == 0:
             self.record[target][2] = True
+            self.num += 1
             for nextTarget in self.record[target][1]:
                 self.check(nextTarget, target)
 # leetcode submit region end(Prohibit modification and deletion)
@@ -79,6 +80,6 @@ class Solution:
 @decorator_time.count_time
 def main():
     sopj = Solution()
-    print(sopj.canFinish(2, [[1,0], [0,1]]))
+    print(sopj.canFinish(2, [[1,0]]))
 
 main()
