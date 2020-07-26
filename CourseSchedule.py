@@ -49,37 +49,41 @@ import decorator_time
 class Solution:
     def __init__(self):
         self.record = []
-        self.num = 0
+        self.finished = set()
+        self.visited = set()
 
     def canFinish(self, numCourses: int, prerequisites: List[List[int]]) -> bool:
-        self.record = [[set(), set(), False] for _ in range(numCourses)]
+        self.record = [set() for _ in range(numCourses)]
         for i in prerequisites:
-            self.record[i[0]][0].add(i[1])
-            self.record[i[1]][1].add(i[0])
+            self.record[i[0]].add(i[1])
         for i in range(numCourses):
-            if self.record[i][2]:
+            if i in self.finished:
                 continue
-            if len(self.record[i][0]) == 0:
-                self.record[i][2] = True
-                self.num += 1
-                for target in self.record[i][1]:
-                    self.check(target, i)
-        return True if self.num == numCourses else False
+            self.visited = set()
+            if not self.dfs(i):
+                return False
+        return True
 
-
-    def check(self, target, finish):
-        self.record[target][0].discard(finish)
-        if len(self.record[target][0]) == 0:
-            self.record[target][2] = True
-            self.num += 1
-            for nextTarget in self.record[target][1]:
-                self.check(nextTarget, target)
+    def dfs(self, node):
+        if len(self.record[node]) == 0:
+            self.finished.add(node)
+            return True
+        self.visited.add(node)
+        for ele in self.record[node]:
+            if ele in self.finished:
+                continue
+            if ele in self.visited:
+                return False
+            if not self.dfs(ele):
+                return False
+        self.finished.add(node)
+        return True
 # leetcode submit region end(Prohibit modification and deletion)
 
 
 @decorator_time.count_time
 def main():
     sopj = Solution()
-    print(sopj.canFinish(2, [[1,0]]))
+    print(sopj.canFinish(7, [[1,0],[0,3],[0,2],[3,2],[2,5],[4,5],[5,6],[2,4]]))
 
 main()
