@@ -84,6 +84,6 @@ class Solution:
 @decorator_time.count_time
 def main():
     sopj = Solution()
-    print(sopj.canFinish(7, [[1,0],[0,3],[0,2],[3,2],[2,5],[4,5],[5,6],[2,4]]))
+    print(sopj.canFinish(7, [[1, 0], [0, 3], [0, 2], [3, 2], [2, 5], [4, 5], [5, 6], [2, 4]]))
 
 main()
