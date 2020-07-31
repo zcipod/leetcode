@@ -45,33 +45,39 @@
 
 from typing import List
 import decorator_time
-
-
 # leetcode submit region begin(Prohibit modification and deletion)
-import queue
 class Solution:
+    def __init__(self):
+        self.record = []
+        self.finished = set()
+        self.visited = set()
+
     def canFinish(self, numCourses: int, prerequisites: List[List[int]]) -> bool:
-        graph = [[] for _ in range(numCourses)]
-        degree = [0] * numCourses
-        Q = queue.Queue()
+        self.record = [set() for _ in range(numCourses)]
         for i in prerequisites:
-            graph[i[1]].append(i[0])
-            degree[i[0]] += 1
+            self.record[i[0]].add(i[1])
         for i in range(numCourses):
-            if not degree[i]:
-                Q.put(i)
-        while not Q.empty():
-            temp = Q.get()
-            for i in graph[temp]:
-                degree[i] -= 1
-                if not degree[i]:
-                    Q.put(i)
-        for i in range(numCourses):
-            if degree[i]:
+            if i in self.finished:
+                continue
+            self.visited = set()
+            if not self.dfs(i):
                 return False
         return True
 
-
+    def dfs(self, node):
+        if len(self.record[node]) == 0:
+            self.finished.add(node)
+            return True
+        self.visited.add(node)
+        for ele in self.record[node]:
+            if ele in self.finished:
+                continue
+            if ele in self.visited:
+                return False
+            if not self.dfs(ele):
+                return False
+        self.finished.add(node)
+        return True
 # leetcode submit region end(Prohibit modification and deletion)
 
 
